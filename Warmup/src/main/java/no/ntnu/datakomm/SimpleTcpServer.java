@@ -20,6 +20,9 @@ public class SimpleTcpServer {
         log("ERROR: the server should never go out of the run() method! After handling one client");
     }
 
+    /**
+     * TODO: Multithreading and allowing multiple request/response cycles per session.
+     */
     public void run() {
         while (!this.serverSocket.isClosed()) {
             log("Server waiting for connection");
