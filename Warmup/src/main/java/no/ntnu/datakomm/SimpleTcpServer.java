@@ -1,17 +1,18 @@
 package no.ntnu.datakomm;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A Simple TCP client, used as a warm-up exercise for assignment A4.
  */
 public class SimpleTcpServer {
-    // The listening wellcoming socket
+    // The welcoming socket
     private ServerSocket serverSocket;
+    // The thread pool
+    private ExecutorService threadPool;
 
     public static void main(String[] args) {
         SimpleTcpServer server = new SimpleTcpServer();
@@ -20,52 +21,19 @@ public class SimpleTcpServer {
         log("ERROR: the server should never go out of the run() method! After handling one client");
     }
 
-    /**
-     * TODO: Multithreading and allowing multiple request/response cycles per session.
-     */
     public void run() {
-        while (!this.serverSocket.isClosed()) {
-            log("Server waiting for connection");
-            Socket clientSocket = null;
+        threadPool = Executors.newFixedThreadPool(18);
+        try {
+            serverSocket = new ServerSocket(1301);
+        } catch (IOException e) {
+            log("ERROR: An I/O error occured when opening server");
+        }
+        while (true) {
             try {
-                clientSocket = this.serverSocket.accept();
-                log("Client connected to server");
+                log("Waiting for new client to connect");
+                threadPool.execute(new SimpleTcpClientHandler(serverSocket.accept()));
             } catch (IOException e) {
-                log("ERROR: An I/O error occured while waiting for connection");
-            }
-            if (clientSocket != null) {
-                Scanner inFromClient = null;
-                PrintWriter outToClient = null;
-                try {
-                    inFromClient = new Scanner(clientSocket.getInputStream());
-                    outToClient = new PrintWriter(clientSocket.getOutputStream(), true);
-                } catch (IOException e) {
-                    log("ERROR: Connection to client has been lost");
-                }
-                if (inFromClient != null && outToClient != null) {
-                    String request = inFromClient.nextLine();
-                    String response = "error";
-
-                    if ("game over".equalsIgnoreCase(request)) {
-                        try {
-                            this.serverSocket.close();
-                        } catch (IOException e) {
-                            log("ERROR: An I/O error occured while closing the server");
-                        }
-                    } else {
-                        String[] numberStrings = request.split("\\+");
-
-                        if (numberStrings.length == 2) {
-                            response = "" + (Integer.parseInt(numberStrings[0]) + Integer.parseInt(numberStrings[1]));
-                        }
-                        outToClient.println(response);
-                        try {
-                            clientSocket.close();
-                        } catch (IOException e) {
-                            log("ERROR: An I/O error occured while closing connection");
-                        }
-                    }
-                }
+                log("ERROR: An I/O error occured while waiting for client");
             }
         }
     }
