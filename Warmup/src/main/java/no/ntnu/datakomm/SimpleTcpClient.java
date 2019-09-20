@@ -1,6 +1,7 @@
 package no.ntnu.datakomm;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -129,13 +130,22 @@ public class SimpleTcpClient {
      * @return True when message successfully sent, false on error.
      */
     private boolean sendRequestToServer(String request) {
-        // TODO - implement this method
-        // Hint: What can go wrong? Several things:
-        // * Connection closed by remote host (server shutdown)
-        // * Internet connection lost, timeout in transmission
-        // * Connection not opened.
-        // * What is the request is null or empty?
-        return false;
+        boolean success = true;
+        if (request == null) {
+            log("ERROR: Request was null");
+            success = false;
+        } else if (request.trim().length() == 0) {
+            log("ERROR: Request was empty");
+            success = false;
+        } else {
+            try {
+                new PrintWriter(this.serverSocket.getOutputStream(), true).println(request);
+            } catch (IOException e) {
+                log("ERROR: Connection to the server has been lost");
+                success = false;
+            }
+        }
+        return success;
     }
 
     /**
