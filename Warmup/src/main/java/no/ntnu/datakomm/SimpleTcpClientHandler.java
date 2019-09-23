@@ -17,7 +17,7 @@ public class SimpleTcpClientHandler implements Runnable {
 
     public void ærun() {
         log("Client Connected");
-        
+
         if (inFromClient != null && outToClient != null) {
             while (inFromClient.hasNextLine() && !finishedHandling) {
                 String request = inFromClient.nextLine();
@@ -49,15 +49,20 @@ public class SimpleTcpClientHandler implements Runnable {
     public void run() {
         openStreams();
         if (streamsAreOpen()) {
-            while (inFromClient.hasNextLine()) {
-                String clientRequest = inFromClient.nextLine();
+            while (inFromClient.hasNextLine() && !finishedHandling) {
+                String request = inFromClient.nextLine();
+                if ("game over".equals(request)) {
+                    finishedHandling = true;
+                } else {
+                    String response = "error";
+                }
             }
         }
     }
 
     private boolean streamsAreOpen() {
-		return false;
-	}
+        return (inFromClient != null && outToClient != null);
+    }
 
     private void openStreams() {
         try {
