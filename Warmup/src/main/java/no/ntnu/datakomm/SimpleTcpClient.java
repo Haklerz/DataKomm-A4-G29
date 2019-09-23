@@ -8,6 +8,11 @@ import java.net.UnknownHostException;
 /**
  * A Simple TCP client, used as a warm-up exercise for assignment A4.
  */
+
+/**
+ * Dette er en test. Beep boop
+ * 
+ */
 public class SimpleTcpClient {
     // Remote host where the server will be running
     private static final String HOST = "localhost";
