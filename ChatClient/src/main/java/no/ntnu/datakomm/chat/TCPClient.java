@@ -45,14 +45,16 @@ public class TCPClient {
      * this method in parallel.
      */
     public synchronized void disconnect() {
-        onDisconnect();
-        if (!connection.isClosed()) {
+        if (connection != null && !connection.isClosed()) {
             try {
                 connection.close();
+                
             } catch (IOException e) {
                 System.out.println("ERROR: An I/O error occured when closing this socket");
             }
+            connection = null;
         }
+        onDisconnect();
     }
 
     /**
@@ -183,53 +185,58 @@ public class TCPClient {
      */
     private void parseIncomingCommands() {
         while (isConnectionActive()) {
-            String[] commandArgument = waitServerResponse().split(" ", 2);
-            String command = commandArgument[0];
-            String argument = (commandArgument.length == 2) ? commandArgument[1] : null;
+            String serverResponse = waitServerResponse();
+            if (serverResponse == null) {
+                disconnect();
+            } else {
+                String[] commandArgument = serverResponse.split(" ", 2);
+                String command = commandArgument[0];
+                String argument = (commandArgument.length == 2) ? commandArgument[1] : null;
 
-            switch (command) {
-            case "loginok":
-                onLoginResult(true, null);
-                break;
+                switch (command) {
+                case "loginok":
+                    onLoginResult(true, null);
+                    break;
 
-            case "loginerr":
-                onLoginResult(false, argument);
-                break;
+                case "loginerr":
+                    onLoginResult(false, argument);
+                    break;
 
-            case "users":
-                onUsersList(argument.split(" "));
-                break;
+                case "users":
+                    onUsersList(argument.split(" "));
+                    break;
 
-            case "msg": {
-                String[] senderMessage = argument.split(" ", 2);
-                String sender = senderMessage[0];
-                String message = (senderMessage.length == 2) ? senderMessage[1] : "";
-                onMsgReceived(false, sender, message);
-            }
-                break;
+                case "msg": {
+                    String[] senderMessage = argument.split(" ", 2);
+                    String sender = senderMessage[0];
+                    String message = (senderMessage.length == 2) ? senderMessage[1] : "";
+                    onMsgReceived(false, sender, message);
+                }
+                    break;
 
-            case "privmsg": {
-                String[] senderMessage = argument.split(" ", 2);
-                String sender = senderMessage[0];
-                String message = (senderMessage.length == 2) ? senderMessage[1] : "";
-                onMsgReceived(true, sender, message);
-            }
-                break;
-            
-            case "msgerr":
-                onMsgError(argument);
-                break;
-            
-            case "cmderr":
-                onCmdError(argument);
-                break;
-            
-            case "supported":
-                onSupported(argument.split(" "));
-                break;
+                case "privmsg": {
+                    String[] senderMessage = argument.split(" ", 2);
+                    String sender = senderMessage[0];
+                    String message = (senderMessage.length == 2) ? senderMessage[1] : "";
+                    onMsgReceived(true, sender, message);
+                }
+                    break;
 
-            default:
-                break;
+                case "msgerr":
+                    onMsgError(argument);
+                    break;
+
+                case "cmderr":
+                    onCmdError(argument);
+                    break;
+
+                case "supported":
+                    onSupported(argument.split(" "));
+                    break;
+
+                default:
+                    break;
+                }
             }
         }
     }
