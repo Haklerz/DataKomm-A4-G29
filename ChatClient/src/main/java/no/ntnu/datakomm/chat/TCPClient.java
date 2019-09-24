@@ -66,13 +66,23 @@ public class TCPClient {
     /**
      * Send a command to server.
      *
-     * @param cmd A command. It should include the command word and optional attributes, according to the protocol.
+     * @param cmd A command. It should include the command word and optional
+     *            attributes, according to the protocol.
      * @return true on success, false otherwise
      */
     private boolean sendCommand(String cmd) {
-        // TODO Step 2: Implement this method
-        // Hint: Remember to check if connection is active
-        return false;
+        boolean success = false;
+        if (connection.isClosed() || toServer == null) {
+            System.out.println("ERROR: Connection has been lost");
+        } else if (cmd == null) {
+            System.out.println("ERROR: Command was null");
+        } else if (cmd.trim().length() == 0) {
+            System.out.println("ERROR: Command was empty");
+        } else {
+            toServer.println(cmd);
+            success = true;
+    }
+        return success;
     }
 
     /**
