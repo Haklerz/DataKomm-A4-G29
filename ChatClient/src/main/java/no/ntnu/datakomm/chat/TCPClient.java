@@ -329,7 +329,7 @@ public class TCPClient {
      * @param errMsg Error description returned by the server
      */
     private void onMsgError(String errMsg) {
-        // TODO Step 7: Implement this method
+        listeners.forEach(l -> l.onMessageError(errMsg));
     }
 
     /**
@@ -338,7 +338,7 @@ public class TCPClient {
      * @param errMsg Error message
      */
     private void onCmdError(String errMsg) {
-        // TODO Step 7: Implement this method
+        listeners.forEach(l -> l.onCommandError(errMsg));
     }
 
     /**
