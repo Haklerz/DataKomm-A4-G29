@@ -183,30 +183,9 @@ public class TCPClient {
      */
     private void parseIncomingCommands() {
         while (isConnectionActive()) {
-            // TODO Step 3: Implement this method
-            // Hint: Reuse waitServerResponse() method
-            // Hint: Have a switch-case (or other way) to check what type of response is
-            // received from the server
-            // and act on it.
-            // Hint: In Step 3 you need to handle only login-related responses.
-            // Hint: In Step 3 reuse onLoginResult() method
-
-            // TODO Step 5: update this method, handle user-list response from the server
-            // Hint: In Step 5 reuse onUserList() method
-
-            // TODO Step 7: add support for incoming chat messages from other users (types:
-            // msg, privmsg)
-            // TODO Step 7: add support for incoming message errors (type: msgerr)
-            // TODO Step 7: add support for incoming command errors (type: cmderr)
-            // Hint for Step 7: call corresponding onXXX() methods which will notify all the
-            // listeners
-
-            // TODO Step 8: add support for incoming supported command list (type:
-            // supported)
-
-            String[] cmdArg = waitServerResponse().split(" ", 2);
-            String command = cmdArg[0];
-            String argument = (cmdArg.length == 2) ? cmdArg[1] : null;
+            String[] commandArgument = waitServerResponse().split(" ", 2);
+            String command = commandArgument[0];
+            String argument = (commandArgument.length == 2) ? commandArgument[1] : null;
 
             switch (command) {
             case "loginok":
@@ -222,16 +201,18 @@ public class TCPClient {
                 break;
 
             case "msg": {
-                String[] sendMsg = argument.split(" ", 2);
-                String message = (sendMsg.length == 2) ? sendMsg[1] : "";
-                onMsgReceived(false, sendMsg[0], message);
+                String[] senderMessage = argument.split(" ", 2);
+                String sender = senderMessage[0];
+                String message = (senderMessage.length == 2) ? senderMessage[1] : "";
+                onMsgReceived(false, sender, message);
             }
                 break;
 
             case "privmsg": {
-                String[] sendMsg = argument.split(" ", 2);
-                String message = (sendMsg.length == 2) ? sendMsg[1] : "";
-                onMsgReceived(true, sendMsg[0], message);
+                String[] senderMessage = argument.split(" ", 2);
+                String sender = senderMessage[0];
+                String message = (senderMessage.length == 2) ? senderMessage[1] : "";
+                onMsgReceived(true, sender, message);
             }
                 break;
             
