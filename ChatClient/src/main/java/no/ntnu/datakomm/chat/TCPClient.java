@@ -105,8 +105,7 @@ public class TCPClient {
      * @param username Username to use
      */
     public void tryLogin(String username) {
-        // TODO Step 3: implement this method
-        // Hint: Reuse sendCommand() method
+        sendCommand("login " + username);
     }
 
     /**
