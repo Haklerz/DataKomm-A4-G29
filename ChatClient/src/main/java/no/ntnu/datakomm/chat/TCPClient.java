@@ -144,13 +144,14 @@ public class TCPClient {
      * @return one line of text (one command) received from the server
      */
     private String waitServerResponse() {
-        // TODO Step 3: Implement this method
-        // TODO Step 4: If you get I/O Exception or null from the stream, it means that
-        // something has gone wrong
-        // with the stream and hence the socket. Probably a good idea to close the
-        // socket in that case.
-
-        return null;
+        String response = null;
+        try {
+            response = fromServer.readLine();
+        } catch (IOException e) {
+            System.out.println("ERROR: An I/O error occured while waiting for server response");
+            disconnect();
+        }
+        return response;
     }
 
     /**
