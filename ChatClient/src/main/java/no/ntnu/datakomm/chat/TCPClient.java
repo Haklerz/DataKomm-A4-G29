@@ -92,10 +92,11 @@ public class TCPClient {
      * @return true if message sent, false on error
      */
     public boolean sendPublicMessage(String message) {
-        // TODO Step 2: implement this method
-        // Hint: Reuse sendCommand() method
-        // Hint: update lastError if you want to store the reason for the error.
-        return false;
+        boolean success = sendCommand("msg " + message);
+        if (!success) {
+            lastError = "ERROR: Message could not be sent";
+        }
+        return success;
     }
 
     /**
