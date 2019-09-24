@@ -309,7 +309,7 @@ public class TCPClient {
      * @param users List with usernames
      */
     private void onUsersList(String[] users) {
-        // TODO Step 5: Implement this method
+        listeners.forEach(l -> l.onUserList(users));
     }
 
     /**
