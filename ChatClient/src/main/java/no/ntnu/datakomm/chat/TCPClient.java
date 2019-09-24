@@ -205,6 +205,52 @@ public class TCPClient {
             // TODO Step 8: add support for incoming supported command list (type:
             // supported)
 
+            String[] cmdArg = waitServerResponse().split(" ", 2);
+            String command = cmdArg[0];
+            String argument = (cmdArg.length == 2) ? cmdArg[1] : null;
+
+            switch (command) {
+            case "loginok":
+                onLoginResult(true, null);
+                break;
+
+            case "loginerr":
+                onLoginResult(false, argument);
+                break;
+
+            case "users":
+                onUsersList(argument.split(" "));
+                break;
+
+            case "msg": {
+                String[] sendMsg = argument.split(" ", 2);
+                String message = (sendMsg.length == 2) ? sendMsg[1] : "";
+                onMsgReceived(false, sendMsg[0], message);
+            }
+                break;
+
+            case "privmsg": {
+                String[] sendMsg = argument.split(" ", 2);
+                String message = (sendMsg.length == 2) ? sendMsg[1] : "";
+                onMsgReceived(true, sendMsg[0], message);
+            }
+                break;
+            
+            case "msgerr":
+                onMsgError(argument);
+                break;
+            
+            case "cmderr":
+                onCmdError(argument);
+                break;
+            
+            case "supported":
+                onSupported(argument.split(" "));
+                break;
+
+            default:
+                break;
+            }
         }
     }
 
