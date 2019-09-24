@@ -29,8 +29,6 @@ public class TCPClient {
             toServer = new PrintWriter(connection.getOutputStream(), true);
             fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             success = true;
-        } catch (UnknownHostException e) {
-            System.out.println("ERROR: The IP address of the host could not be determined");
         } catch (IOException e) {
             System.out.println("ERROR: An I/O error occured when connecting to server");
         }
