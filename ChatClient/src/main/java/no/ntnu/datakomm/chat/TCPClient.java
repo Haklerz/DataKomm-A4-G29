@@ -38,17 +38,22 @@ public class TCPClient {
     }
 
     /**
-     * Close the socket. This method must be synchronized, because several
-     * threads may try to call it. For example: When "Disconnect" button is
-     * pressed in the GUI thread, the connection will get closed. Meanwhile, the
-     * background thread trying to read server's response will get error in the
-     * input stream and may try to call this method when the socket is already
-     * in the process of being closed. with "synchronized" keyword we make sure
-     * that no two threads call this method in parallel.
+     * Close the socket. This method must be synchronized, because several threads
+     * may try to call it. For example: When "Disconnect" button is pressed in the
+     * GUI thread, the connection will get closed. Meanwhile, the background thread
+     * trying to read server's response will get error in the input stream and may
+     * try to call this method when the socket is already in the process of being
+     * closed. with "synchronized" keyword we make sure that no two threads call
+     * this method in parallel.
      */
     public synchronized void disconnect() {
-        // TODO Step 4: implement this method
-        // Hint: remember to check if connection is active
+        if (!connection.isClosed()) {
+            try {
+                connection.close();
+            } catch (IOException e) {
+                System.out.println("ERROR: An I/O error occured when closing this socket");
+    }
+        }
     }
 
     /**
