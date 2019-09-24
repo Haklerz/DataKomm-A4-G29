@@ -33,7 +33,7 @@ public class TCPClient {
             System.out.println("ERROR: The IP address of the host could not be determined");
         } catch (IOException e) {
             System.out.println("ERROR: An I/O error occured when connecting to server");
-    }
+        }
         return success;
     }
 
@@ -52,7 +52,7 @@ public class TCPClient {
                 connection.close();
             } catch (IOException e) {
                 System.out.println("ERROR: An I/O error occured when closing this socket");
-    }
+            }
         }
     }
 
@@ -81,7 +81,7 @@ public class TCPClient {
         } else {
             toServer.println(cmd);
             success = true;
-    }
+        }
         return success;
     }
 
@@ -114,7 +114,8 @@ public class TCPClient {
      */
     public void refreshUserList() {
         // TODO Step 5: implement this method
-        // Hint: Use Wireshark and the provided chat client reference app to find out what commands the
+        // Hint: Use Wireshark and the provided chat client reference app to find out
+        // what commands the
         // client and server exchange for user listing.
     }
 
@@ -132,7 +133,6 @@ public class TCPClient {
         return false;
     }
 
-
     /**
      * Send a request for the list of commands that server supports.
      */
@@ -141,7 +141,6 @@ public class TCPClient {
         // Hint: Reuse sendCommand() method
     }
 
-
     /**
      * Wait for chat server's response
      *
@@ -149,8 +148,10 @@ public class TCPClient {
      */
     private String waitServerResponse() {
         // TODO Step 3: Implement this method
-        // TODO Step 4: If you get I/O Exception or null from the stream, it means that something has gone wrong
-        // with the stream and hence the socket. Probably a good idea to close the socket in that case.
+        // TODO Step 4: If you get I/O Exception or null from the stream, it means that
+        // something has gone wrong
+        // with the stream and hence the socket. Probably a good idea to close the
+        // socket in that case.
 
         return null;
     }
@@ -180,14 +181,15 @@ public class TCPClient {
     }
 
     /**
-     * Read incoming messages one by one, generate events for the listeners. A loop that runs until
-     * the connection is closed.
+     * Read incoming messages one by one, generate events for the listeners. A loop
+     * that runs until the connection is closed.
      */
     private void parseIncomingCommands() {
         while (isConnectionActive()) {
             // TODO Step 3: Implement this method
             // Hint: Reuse waitServerResponse() method
-            // Hint: Have a switch-case (or other way) to check what type of response is received from the server
+            // Hint: Have a switch-case (or other way) to check what type of response is
+            // received from the server
             // and act on it.
             // Hint: In Step 3 you need to handle only login-related responses.
             // Hint: In Step 3 reuse onLoginResult() method
@@ -195,12 +197,15 @@ public class TCPClient {
             // TODO Step 5: update this method, handle user-list response from the server
             // Hint: In Step 5 reuse onUserList() method
 
-            // TODO Step 7: add support for incoming chat messages from other users (types: msg, privmsg)
+            // TODO Step 7: add support for incoming chat messages from other users (types:
+            // msg, privmsg)
             // TODO Step 7: add support for incoming message errors (type: msgerr)
             // TODO Step 7: add support for incoming command errors (type: cmderr)
-            // Hint for Step 7: call corresponding onXXX() methods which will notify all the listeners
+            // Hint for Step 7: call corresponding onXXX() methods which will notify all the
+            // listeners
 
-            // TODO Step 8: add support for incoming supported command list (type: supported)
+            // TODO Step 8: add support for incoming supported command list (type:
+            // supported)
 
         }
     }
@@ -225,9 +230,12 @@ public class TCPClient {
         listeners.remove(listener);
     }
 
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // The following methods are all event-notificators - notify all the listeners about a specific event.
+    // The following methods are all event-notificators - notify all the listeners
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////// about
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////// a
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////// specific
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////// event.
     // By "event" here we mean "information received from the chat server".
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -245,8 +253,8 @@ public class TCPClient {
     }
 
     /**
-     * Notify listeners that socket was closed by the remote end (server or
-     * Internet error)
+     * Notify listeners that socket was closed by the remote end (server or Internet
+     * error)
      */
     private void onDisconnect() {
         // TODO Step 4: Implement this method
@@ -292,8 +300,8 @@ public class TCPClient {
     }
 
     /**
-     * Notify listeners that a help response (supported commands) was received
-     * from the server
+     * Notify listeners that a help response (supported commands) was received from
+     * the server
      *
      * @param commands Commands supported by the server
      */
