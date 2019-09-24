@@ -45,10 +45,10 @@ public class TCPClient {
      * this method in parallel.
      */
     public synchronized void disconnect() {
+        onDisconnect();
         if (!connection.isClosed()) {
             try {
                 connection.close();
-                onDisconnect();
             } catch (IOException e) {
                 System.out.println("ERROR: An I/O error occured when closing this socket");
             }
