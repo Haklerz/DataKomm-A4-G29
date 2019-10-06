@@ -1,13 +1,21 @@
 package no.ntnu.datakomm;
 
+import java.io.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.logging.SocketHandler;
+
 /**
  * A Simple TCP client, used as a warm-up exercise for assignment A4.
  */
 public class SimpleTcpClient {
     // Remote host where the server will be running
     private static final String HOST = "localhost";
+    //private static final String HOST = "datakomm.work";
     // TCP port
     private static final int PORT = 1301;
+
+    private Socket serverSocket;
 
     /**
      * Run the TCP Client.
@@ -86,10 +94,22 @@ public class SimpleTcpClient {
     /**
      * Close the TCP connection to the remote server.
      *
-     * @return True on success, false otherwise
+     * @returnv true if connection closed, else return false.
      */
     private boolean closeConnection() {
-        return false;
+        // TODO - implement this method
+        boolean socketClosed = false;
+
+        try
+        {
+            this.serverSocket.close();
+            socketClosed = true;
+        } catch (IOException socketCloseError)
+        {
+            System.out.println("Error: " + socketCloseError.getMessage());
+        }
+
+        return socketClosed;
     }
 
     /**
@@ -102,7 +122,19 @@ public class SimpleTcpClient {
     private boolean connectToServer(String host, int port) {
         // TODO - implement this method
         // Remember to catch all possible exceptions that the Socket class can throw.
-        return false;
+        boolean connected = false;
+
+        try
+        {
+            this.serverSocket = new Socket(host, port);
+            connected = true;
+        }
+        catch (IOException connectionError)
+        {
+            System.out.println("Error: " + connectionError.getMessage());;
+        }
+
+        return connected;
     }
 
     /**
@@ -118,7 +150,33 @@ public class SimpleTcpClient {
         // * Internet connection lost, timeout in transmission
         // * Connection not opened.
         // * What is the request is null or empty?
-        return false;
+        boolean requestSent = false;
+
+        if (request == null)
+        {
+            log("Error: Request was null.");
+        }
+
+        else if (request.trim().length() == 0)
+        {
+            log("Error: Request was empty.");
+        }
+
+        else
+        {
+            try
+            {
+                OutputStream outputStream = this.serverSocket.getOutputStream();
+                PrintWriter printWriter = new PrintWriter(outputStream, true);
+                printWriter.println(request); // New line (\n) is added automatically.
+                requestSent = true;
+            } catch (IOException readError)
+            {
+                System.out.println("Error: " + readError.getMessage());
+            }
+        }
+
+        return requestSent;
     }
 
     /**
@@ -130,7 +188,20 @@ public class SimpleTcpClient {
     private String readResponseFromServer() {
         // TODO - implement this method
         // Similarly to other methods, exception can happen while trying to read the input stream of the TCP Socket
-        return null;
+        String response = null;
+
+        try
+        {
+            InputStream inputStream = serverSocket.getInputStream(); // Returns input stream for given socket.
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream); // Bridge from byte streams to characters.
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader); // Reads text from character input stream.
+            response = bufferedReader.readLine();
+        } catch (IOException responseError)
+        {
+            System.out.println("Error: " + responseError.getMessage());
+        }
+
+        return response;
     }
 
     /**

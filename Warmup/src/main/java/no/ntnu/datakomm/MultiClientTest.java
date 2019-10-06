@@ -22,7 +22,7 @@ public class MultiClientTest {
      * Start a new client in a new thread.
      */
     private static void startNewClient() {
-        final SimpleTcpClient client = new SimpleTcpClient();
+        final main.java.no.ntnu.datakomm.SimpleTcpClient client = new main.java.no.ntnu.datakomm.SimpleTcpClient();
         Runnable taskToBeExecutedOnAnotherThread = new Runnable() {
             public void run() {
                 try {
