@@ -346,6 +346,10 @@ public class TCPClient {
      * @param commands Commands supported by the server
      */
     private void onSupported(String[] commands) {
-        // TODO Step 8: Implement this method
+        // TODO Step 8: Implement this method ----- DONE!
+        for (ChatListener listener : listeners)
+        {
+            listener.onSupportedCommands(commands);
+        }
     }
 }
