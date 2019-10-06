@@ -116,10 +116,17 @@ public class TCPClient {
      * @return true if message sent, false on error
      */
     public boolean sendPublicMessage(String message) {
-        // TODO Step 2: implement this method
+        // TODO Step 2: implement this method ----- DONE!
         // Hint: Reuse sendCommand() method
         // Hint: update lastError if you want to store the reason for the error.
-        return false;
+        boolean publicMessageSent = this.sendCommand("msg " + message);
+
+        if ( !publicMessageSent )
+        {
+            this.lastError = "Error: Public message not sent";
+        }
+
+        return publicMessageSent;
     }
 
     /**
