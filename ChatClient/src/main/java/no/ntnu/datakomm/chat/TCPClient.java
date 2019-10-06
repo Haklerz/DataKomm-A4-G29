@@ -336,7 +336,11 @@ public class TCPClient {
      * @param errMsg Error message
      */
     private void onCmdError(String errMsg) {
-        // TODO Step 7: Implement this method
+        // TODO Step 7: Implement this method ----- DONE!
+        for (ChatListener listener : listeners)
+        {
+            listener.onCommandError(errMsg);
+        }
     }
 
     /**
