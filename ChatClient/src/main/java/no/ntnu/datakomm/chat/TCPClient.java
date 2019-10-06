@@ -1,5 +1,7 @@
 package no.ntnu.datakomm.chat;
 
+//import jdk.internal.util.xml.impl.Input;
+
 import java.io.*;
 import java.net.*;
 import java.util.LinkedList;
@@ -177,6 +179,14 @@ public class TCPClient {
         // Hint: Use Wireshark and the provided chat client reference app to find out what commands the
         // client and server exchange for user listing.
         this.sendCommand("users");
+    }
+
+    private void onUsernameList(String[] usernames)
+    {
+        for (ChatListener listener : this.listeners)
+        {
+            listener.onUserList(usernames);
+        }
     }
 
     /**
