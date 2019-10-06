@@ -60,7 +60,7 @@ public class SimpleTcpServer {
         {
             log("Waiting for new client to connect.");
             Socket clientSocket = this.welcomeSocket.accept(); // Waits for a connection to be made to this socket and accepts.
-            main.java.no.ntnu.datakomm.SimpleTcpClientHandler simpleTcpClientHandler = new main.java.no.ntnu.datakomm.SimpleTcpClientHandler(clientSocket); // Creates a handler for the TCP client.
+            SimpleTcpClientHandler simpleTcpClientHandler = new SimpleTcpClientHandler(clientSocket); // Creates a handler for the TCP client.
             this.threadPool.execute(simpleTcpClientHandler); // Execute a given command at some time in the future.
             log("Client successfully connected.");
         } catch (IOException clientCreatedError)
