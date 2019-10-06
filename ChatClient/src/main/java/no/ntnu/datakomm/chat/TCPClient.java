@@ -80,9 +80,33 @@ public class TCPClient {
      * @return true on success, false otherwise
      */
     private boolean sendCommand(String cmd) {
-        // TODO Step 2: Implement this method
+        // TODO Step 2: Implement this method ----- DONE!
         // Hint: Remember to check if connection is active
-        return false;
+        boolean commandSent = false;
+
+        if ( cmd == null)
+        {
+            System.out.println("Error: Command was null");
+        }
+
+        else if ( cmd.trim().length() == 0 )
+        {
+            System.out.println("Error: Command was empty");
+        }
+
+        else if ( this.connection.isClosed() || this.toServer == null )
+        {
+            System.out.println("Error: Connection not established");
+        }
+
+        else
+        {
+            // Command word to contain a command word (msg, privmsg, login) following a message.
+            this.toServer.println(cmd);
+            commandSent = true;
+        }
+
+        return commandSent;
     }
 
     /**
