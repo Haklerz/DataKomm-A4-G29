@@ -174,8 +174,9 @@ public class TCPClient {
      * Send a request for the list of commands that server supports.
      */
     public void askSupportedCommands() {
-        // TODO Step 8: Implement this method
+        // TODO Step 8: Implement this method ----- DONE!
         // Hint: Reuse sendCommand() method
+        this.sendCommand("help");
     }
 
 
