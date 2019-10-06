@@ -185,11 +185,22 @@ public class TCPClient {
      * @return one line of text (one command) received from the server
      */
     private String waitServerResponse() {
-        // TODO Step 3: Implement this method
-        // TODO Step 4: If you get I/O Exception or null from the stream, it means that something has gone wrong
+        // TODO Step 3: Implement this method ----- DONE!
+        // TODO Step 4: If you get I/O Exception or null from the stream, it means that something has gone wrong ----- DONE!
         // with the stream and hence the socket. Probably a good idea to close the socket in that case.
+        String serverResponse = null;
 
-        return null;
+        try
+        {
+            // Tries to read a line terminated by line feed (\n, \r, or carriage return)
+            serverResponse = this.fromServer.readLine();
+        } catch (IOException serverResponseError)
+        {
+            System.out.println("Error: " + serverResponseError.getMessage());
+            this.disconnect();
+        }
+
+        return serverResponse;
     }
 
     /**
