@@ -163,10 +163,17 @@ public class TCPClient {
      * @return true if message sent, false on error
      */
     public boolean sendPrivateMessage(String recipient, String message) {
-        // TODO Step 6: Implement this method
+        // TODO Step 6: Implement this method ----- DONE!
         // Hint: Reuse sendCommand() method
         // Hint: update lastError if you want to store the reason for the error.
-        return false;
+        boolean privateMessageSent = this.sendCommand("privmsg " + recipient + " " + message);
+
+        if ( !privateMessageSent )
+        {
+            this.lastError = "Error: Private message not sent";
+        }
+
+        return privateMessageSent;
     }
 
 
