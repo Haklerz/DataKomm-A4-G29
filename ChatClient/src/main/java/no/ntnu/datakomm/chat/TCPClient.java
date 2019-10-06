@@ -135,8 +135,14 @@ public class TCPClient {
      * @param username Username to use
      */
     public void tryLogin(String username) {
-        // TODO Step 3: implement this method
+        // TODO Step 3: implement this method ----- DONE!
         // Hint: Reuse sendCommand() method
+        boolean loginSuccessful = this.sendCommand("login " + username);
+
+        if ( !loginSuccessful )
+        {
+            this.lastError = "Error: Login unsuccessful";
+        }
     }
 
     /**
