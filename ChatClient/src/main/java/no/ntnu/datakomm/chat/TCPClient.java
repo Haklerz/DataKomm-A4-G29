@@ -85,7 +85,15 @@ public class TCPClient {
      * @return true if the connection is active (opened), false if not.
      */
     public boolean isConnectionActive() {
-        return connection != null;
+        // TODO - Modified
+        boolean connectionActive = false;
+
+        if ( this.connection != null )
+        {
+            connectionActive = true;
+        }
+
+        return connectionActive;
     }
 
     /**
