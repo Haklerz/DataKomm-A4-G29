@@ -233,23 +233,114 @@ public class TCPClient {
      */
     private void parseIncomingCommands() {
         while (isConnectionActive()) {
-            // TODO Step 3: Implement this method
+            // TODO Step 3: Implement this method ----- DONE!
             // Hint: Reuse waitServerResponse() method
             // Hint: Have a switch-case (or other way) to check what type of response is received from the server
             // and act on it.
             // Hint: In Step 3 you need to handle only login-related responses.
             // Hint: In Step 3 reuse onLoginResult() method
 
-            // TODO Step 5: update this method, handle user-list response from the server
+            // TODO Step 5: update this method, handle user-list response from the server ----- DONE!
             // Hint: In Step 5 reuse onUserList() method
 
-            // TODO Step 7: add support for incoming chat messages from other users (types: msg, privmsg)
+            // TODO Step 7: add support for incoming chat messages from other users (types: msg, privmsg) ----- DONE!
             // TODO Step 7: add support for incoming message errors (type: msgerr)
             // TODO Step 7: add support for incoming command errors (type: cmderr)
             // Hint for Step 7: call corresponding onXXX() methods which will notify all the listeners
 
-            // TODO Step 8: add support for incoming supported command list (type: supported)
+            // TODO Step 8: add support for incoming supported command list (type: supported) ----- DONE!
 
+            // Waits for a response from the server.
+            String serverResponse = this.waitServerResponse();
+            if ( serverResponse == null )
+            {
+                // Disconnect connection.
+                this.disconnect();
+            }
+
+            else
+            {
+                // serverResponse is not null. Check for command word.
+                // First split response into segments, with segment 1 as command word, segment 2 as the argument.
+                String[] serverResponseSplit = serverResponse.split(" ", 2);
+                String command = serverResponseSplit[0]; // The command word.
+                String argument = null; // The argument.
+                if ( serverResponseSplit.length == 2 )
+                {
+                    argument = serverResponseSplit[1];
+                }
+
+                // Check each command word and do appropriate action.
+                switch (command)
+                {
+                    // ------ Start of Step 3 ----
+                    // TODO ----- DONE!
+                    case "loginok":
+                        this.onLoginResult(true, null);
+                        break;
+
+                    case "loginerr":
+                        this.onLoginResult(false, argument);
+                        break;
+                    // ------ End of Step 3 ----
+
+                    // ------ Start of Step 5 ----
+                    case "users":
+                        // TODO ----- DONE!
+                        // As seen in Wireshark as list of all usernames (separated with space) are sent when
+                        // "users" is called. Splitting this string into usernames.
+                        this.onUsersList(argument.split(" "));
+                        break;
+                    // ------ End of Step 5 ----
+
+                    // ------ Start of Step 7 ----
+                    case "msg":
+                        // TODO ----- DONE!
+                        String[] pubmsgArgument = argument.split(" ", 2);
+                        String pubUsername = pubmsgArgument[0];
+                        String pubMessage = null;
+                        if (pubmsgArgument.length == 2)
+                        {
+                            pubMessage = pubmsgArgument[1];
+                        }
+                        this.onMsgReceived(false, pubUsername, pubMessage);
+                        break;
+
+                    case "privmsg":
+                        // TODO ----- DONE!
+                        String[] privmsgArgument = argument.split(" ", 2);
+                        String privUsername = privmsgArgument[0];
+                        String privMessage = null;
+                        if (privmsgArgument.length == 2)
+                        {
+                            privMessage = privmsgArgument[1];
+                        }
+                        this.onMsgReceived(true, privUsername, privMessage);
+                        break;
+
+                    case "msgerr":
+                        // TODO ----- DONE!
+                        this.onMsgError(argument);
+                        break;
+
+                    case "cmderr":
+                        // TODO ----- DONE!
+                        this.onCmdError(argument);
+                        break;
+                    // ------ End of Step 7 ----
+
+                    // ------ Start of Step 8 ----
+                    case "supported":
+                        // TODO ----- DONE!
+                        String[] commands = argument.split(" ");
+                        this.onSupported(commands);
+                        break;
+                    // ------ End of Step 8 ----
+
+                    default:
+                        break;
+                }
+            }
         }
     }
 
